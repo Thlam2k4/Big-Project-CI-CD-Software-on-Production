@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpmyadmin-deploy
+spec:
+  selector:
+    matchLabels:
+      app: phpmyadmin-deploy
+  template:
+    metadata:
+      labels:
+        app: phpmyadmin-deploy
+    spec:
+      containers:
+      - name: phpmyadmin-deploy
+        image: phpmyadmin
+        env:
+        - name: PMA_HOST
+          value: mysql-service
+        - name: PMA_PORT
+          value: "3306"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpmyadmin-svc
+spec:
+  selector:
+    app: phpmyadmin-deploy
+  ports:
+  - port: 80
+    targetPort: 80

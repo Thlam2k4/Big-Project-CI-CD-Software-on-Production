@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deploy
+spec:
+  selector:
+    matchLabels:
+      app: mysql-deploy
+  template:
+    metadata:
+      labels:
+        app: mysql-deploy
+    spec:
+      containers:
+      - name: mysql-deploy
+        image: mysql:5.7
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: secret
+          - name: MYSQL_DATABASE
+            value: nodelogin
+          - name: MYSQL_USER
+            value: thanhlam
+          - name: MYSQL_PASSWORD
+            value: secret
+        resources:
+          limits:
+            memory: "528Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3306
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql-deploy
+  ports:
+  - port: 3306
+  type: LoadBalancer

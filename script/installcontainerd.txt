@@ -1,0 +1,21 @@
+#Remove docker
+
+sudo systemctl stop docker
+sudo yum remove docker-ce
+sudo rm -rf /var/lib/docker
+
+#Install containerd
+
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum makecache fast
+sudo yum install -y containerd.io
+
+#Start containerd
+
+sudo systemctl enable containerd
+sudo systemctl start containerd
+
+#Check containerd
+
+sudo systemctl status containerd
